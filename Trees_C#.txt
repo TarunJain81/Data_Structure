@@ -1,0 +1,163 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Csharp_Datastructure
+{
+
+    public class Tree
+    {
+        private readonly TreeNode _root;
+
+        public Tree(int value)
+        {
+            _root = new Csharp_Datastructure.TreeNode(value);
+        }
+
+        public void Insert(int value)
+        {
+            _root.Insert(value);
+        }
+    }
+    class TreeNode
+    {
+        private TreeNode _left;
+
+        private TreeNode _right;
+
+
+        public IComparable data { get; private set; }
+
+        public override string ToString()
+        {
+            return data.ToString();
+        }
+
+        public TreeNode(IComparable d)
+        {
+            data = d;
+        }
+        public TreeNode Insert(IComparable value)
+        {
+            var node = new TreeNode(value);
+
+            return Insert(node) ? node : null;
+
+        }
+
+        private bool Insert(TreeNode node)
+        {
+            int compareTo = data.CompareTo(node.data);
+            if(compareTo==0)
+            {
+                return false;
+            }
+
+            else if(compareTo<0)
+            {
+                if (_left == null)
+                {
+                    _left = node;
+                    return true;
+                }
+                _left.Insert(node);
+                return true;
+
+            }
+
+            if(compareTo > 0)
+           {
+                if(_right==null)
+                {
+                    _right = node;
+                    return true;
+                }
+                _right.Insert(node);
+                return true;
+            }
+
+
+
+            return false;
+        }
+
+
+
+        public TreeNode Search(IComparable value)
+        {
+
+            int compareTo = this.data.CompareTo(value);
+
+
+            if (compareTo == 0)
+                return this;
+
+            if (compareTo>0)
+                return this._right.Search(value);
+
+            if (compareTo < 0)
+            {
+                if(_left==null)
+                {
+                    return null;
+                }
+
+                return this._left.Search(value);
+            }
+
+            return null;
+
+         }
+
+
+        public List<TreeNode> PreOrder
+        {
+           get
+            {
+                var list = new List<TreeNode>();
+                list.Add(this);
+                if(_left!=null)
+                {
+                    list.AddRange(_left.PreOrder);
+                }
+
+                if(_right != null)
+                {
+                    list.AddRange(_right.PreOrder);
+                }
+                return list;
+            }
+
+       /*     public IEnumerable<TreeNode> PreOrder
+        { 
+           get
+            {
+                yield return this;
+                if(_left!=null)
+                {
+                    foreach(var node in _left.PreOrder)
+                    {
+                        yield return node;
+                    }
+                }
+
+                if(_right!=null)
+                {
+                    foreach(var node in _right.PreOrder)
+                    {
+                        yield return node;
+                    }
+                }
+            }*/
+        }
+
+
+        public TreeNode Remove(IComparable value,TreeNode parent)
+        {
+            Console.WriteLine(string.Join(", ", PreOrder));
+        }
+
+    }
+}
