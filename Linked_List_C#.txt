@@ -1,0 +1,134 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Csharp_Datastructure
+{
+
+  public  interface ILinkedList
+    {
+        void InsertAtFront(object value);
+
+        void InsertAtBack(object value);
+
+        object RemoveFromFront();
+
+        object RemoveFromBack();
+
+        bool IsEmpty();
+    }
+
+    class LinkedList:ILinkedList
+    {
+        private LinkedListNode _firstNode;
+
+        private LinkedListNode _lastNode;
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var node = _firstNode;
+
+            bool isFirst = true;
+
+            while(node!=null)
+            {
+                if (isFirst)
+                    isFirst = false;
+
+                else
+                    sb.Append(" => ");
+
+                sb.Append(node.Value);
+
+                node = node.Next;
+            }
+
+            return sb.ToString();
+        }
+        public void InsertAtFront(object value)
+        {
+            LinkedListNode node = new LinkedListNode(value);
+            if (_firstNode != null)
+            {
+                node.Next = _firstNode;
+
+                _firstNode = node;
+            }
+
+            else
+                _firstNode = _lastNode = node;
+        }
+
+        public void InsertAtBack(object value)
+        {
+            LinkedListNode node = new LinkedListNode(value);
+
+            if(_lastNode!=null)
+            {
+                _lastNode.Next = node;
+
+                _lastNode = node;
+            }
+
+
+        }
+
+        public object RemoveFromBack()
+        {
+            if(IsEmpty())
+            {
+                throw new EmptyListException("The Linked List is empty");
+            }
+
+            LinkedListNode current = _firstNode;
+
+            while(current.Next!=null)
+            {
+                if (current.Next.Next == null)
+                    break;
+
+                current = current.Next;
+            }
+
+            object value;
+
+            if(current.Next == null)
+            {
+                _firstNode = _lastNode = null;
+                value = current.Value;
+            }
+
+            else
+            {
+                value = current.Next.Value;
+                current.Next = null;
+                _lastNode = current;
+            }
+
+            return value;
+        }
+
+        public bool IsEmpty()
+        {
+            return  _firstNode == null && _lastNode==null;
+        }
+
+        public object RemoveFromFront()
+        {
+            object value=null;
+
+            if (_firstNode != null)
+            {
+                value = _firstNode.Value;
+                _firstNode = _firstNode.Next;
+                return value;
+            }
+            else
+                return value;
+         }
+      }
+}
